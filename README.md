@@ -66,6 +66,12 @@ public/
 
 ## 開発方法
 
+公開 URL:
+
+```txt
+https://yuzuleung.github.io/my-vision-story/
+```
+
 依存関係をインストールします。
 
 ```bash
@@ -92,11 +98,13 @@ http://localhost:3000
 npm run build
 ```
 
-ビルド後に本番サーバーとして起動する場合は、以下を実行します。
+GitHub Pages 用にビルドする場合は、リポジトリ名のパス `/my-vision-story` を付けて静的ファイルを書き出します。
 
 ```bash
-npm run start
+GITHUB_PAGES=true npm run build
 ```
+
+この設定では `out/` ディレクトリが生成され、GitHub Actions によって GitHub Pages へデプロイされます。`main` ブランチに push すると、自動的に公開ページが更新されます。
 
 ## 制作意図
 

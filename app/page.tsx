@@ -17,6 +17,9 @@ const sections = [
   "ending",
 ];
 
+const imageSrc = (path: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${path}`;
+
 export default function Home() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,7 +41,7 @@ export default function Home() {
 
       <ImageScene
         id="before-ai"
-        image="/images/01-before-ai.png"
+        image={imageSrc("/images/01-before-ai.png")}
         alt="AI以前、自分の手でコードと向き合う私"
         body={"以前の私は、\n自分の手でコードを書き、\nエラーを読み、\n原因を探し、\n一つずつ問題を解決していた。"}
         brightness="balanced"
@@ -50,7 +53,7 @@ export default function Home() {
 
       <ImageScene
         id="with-ai"
-        image="/images/02-with-ai.png"
+        image={imageSrc("/images/02-with-ai.png")}
         alt="AIと共にコードを見る私"
         body={"今は、AIが数分でコードを書く。\n私はそれを見て、確認し、判断する。"}
         body2={"便利になった。\nでも、少し怖かった。"}
@@ -63,7 +66,7 @@ export default function Home() {
 
       <ImageScene
         id="lost"
-        image="/images/03-lost.png"
+        image={imageSrc("/images/03-lost.png")}
         alt="迷いの中で自分の価値を考える私"
         body={"AIの方が速く、正確に作れるなら、\n私は何をする人になるのだろう。"}
         body2={"エンジニアとしての価値とは何だろう。"}
@@ -78,7 +81,7 @@ export default function Home() {
 
       <ImageScene
         id="future-work"
-        image="/images/04-future-work.png"
+        image={imageSrc("/images/04-future-work.png")}
         alt="AIと協働しながら未来の仕事へ向かう私"
         title={"私は実行者から、\n創造者・指揮者・評価者へ。"}
         note={"AIは作業を助ける。\n私は問いを立て、価値を決め、方向を示す。"}
@@ -92,7 +95,7 @@ export default function Home() {
 
       <ImageScene
         id="future-life"
-        image="/images/05-future-life.png"
+        image={imageSrc("/images/05-future-life.png")}
         alt="生活の中に自然に入り込むAI"
         title={"AIは仕事だけでなく、\n生活の中にも自然に入り込んでいく。"}
         note={"予約、買い物、移動、相談。\nAIは日常の小さな選択にも寄り添う存在になる。"}
@@ -103,7 +106,10 @@ export default function Home() {
         onAdvance={() => advanceTo(6)}
       />
 
-      <EndingScene onAdvance={() => advanceTo(7)} />
+      <EndingScene
+        image={imageSrc("/images/06-leading-ai.png")}
+        onAdvance={() => advanceTo(7)}
+      />
     </div>
   );
 }

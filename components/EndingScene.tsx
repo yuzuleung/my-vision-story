@@ -6,11 +6,17 @@ import {
   StorySection,
 } from "@/components/StorySection";
 
-export function EndingScene({ onAdvance }: { onAdvance: () => void }) {
+export function EndingScene({
+  image,
+  onAdvance,
+}: {
+  image: string;
+  onAdvance: () => void;
+}) {
   return (
     <StorySection id="ending" tone="hope" onAdvance={onAdvance}>
       <ImageBackdrop
-        src="/images/06-leading-ai.png"
+        src={image}
         alt="AIと共に未来へ進む私"
         brightness="bright"
         focus="center"
