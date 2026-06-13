@@ -19,7 +19,7 @@ type ImageSceneProps = {
   title?: string;
   note?: string;
   tone?: "dark" | "light" | "mist" | "hope";
-  brightness?: "dark" | "balanced" | "bright";
+  brightness?: "dark" | "balanced" | "soft" | "bright";
   focus?: string;
   placement?: "left" | "center" | "right" | "lowLeft";
   glow?: boolean;
@@ -27,10 +27,13 @@ type ImageSceneProps = {
   dimOnSecond?: boolean;
   chapter?: string;
   textPanel?: boolean;
+  textClassName?: string;
   onAdvance: () => void;
   typewriter?: boolean;
   typewriterDelay?: number;
   bodyNoWrap?: boolean;
+  bodyLarge?: boolean;
+  titleSize?: "default" | "small";
   delay?: number;
 };
 
@@ -71,13 +74,16 @@ export function ImageScene({
   dimOnSecond = false,
   chapter,
   textPanel = false,
+  textClassName,
   onAdvance,
   typewriter = false,
   typewriterDelay,
   bodyNoWrap = false,
+  bodyLarge = false,
+  titleSize = "default",
   delay = 0,
 }: ImageSceneProps) {
-  const isLight = brightness === "bright";
+  const isLight = brightness === "bright" || brightness === "soft";
   const [isBodyComplete, setIsBodyComplete] = useState(false);
   const [showScrollCue, setShowScrollCue] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -161,11 +167,13 @@ export function ImageScene({
             body={body}
             align={align}
             muted={!isLight}
-            className={isLight ? "text-[#111]" : ""}
+            className={textClassName ?? (isLight ? "text-[#111]" : "")}
             delay={delay}
             typewriter={typewriter}
             typewriterDelay={typewriterDelay}
             bodyNoWrap={bodyNoWrap}
+            bodyLarge={bodyLarge}
+            titleSize={titleSize}
             onTypewriterComplete={() => setIsBodyComplete(true)}
           />
           {body2 ? (

@@ -1,10 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import {
   ChapterLabel,
   ImageBackdrop,
+  ScrollCue,
   StorySection,
 } from "@/components/StorySection";
 
@@ -17,22 +18,20 @@ export function EndingScene({
 }) {
   const contentRef = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(contentRef, { once: false, amount: 0.55 });
-  const [showQuestion, setShowQuestion] = useState(false);
+  const [showScrollCue, setShowScrollCue] = useState(false);
 
   useEffect(() => {
     if (!isInView) {
-      setShowQuestion(false);
+      setShowScrollCue(false);
       return;
     }
 
-    setShowQuestion(false);
-    const questionTimer = window.setTimeout(() => {
-      setShowQuestion(true);
-    }, 4000);
+    setShowScrollCue(false);
+    const timer = window.setTimeout(() => {
+      setShowScrollCue(true);
+    }, 3500);
 
-    return () => {
-      window.clearTimeout(questionTimer);
-    };
+    return () => window.clearTimeout(timer);
   }, [isInView]);
 
   return (
@@ -45,9 +44,9 @@ export function EndingScene({
         focus="center"
       />
       <motion.div
-        className="absolute inset-0 z-[2] bg-white"
-        initial={{ opacity: 0.12 }}
-        whileInView={{ opacity: 0 }}
+        className="absolute inset-0 z-[2] bg-black"
+        initial={{ opacity: 0.24 }}
+        whileInView={{ opacity: 0.18 }}
         viewport={{ once: false, amount: 0.6 }}
         transition={{ duration: 2.4, ease: "easeOut" }}
       />
@@ -57,7 +56,7 @@ export function EndingScene({
       >
         <div className="mx-auto w-full max-w-5xl">
           <motion.div
-            className="font-story-serif mx-auto flex max-w-3xl flex-col gap-3 text-3xl font-light leading-[1.68] text-black/78 sm:text-5xl sm:leading-[1.45]"
+            className="font-story-serif mx-auto flex max-w-3xl flex-col gap-3 text-3xl font-light leading-[1.68] text-white/88 drop-shadow-[0_8px_28px_rgba(0,0,0,0.45)] sm:text-5xl sm:leading-[1.45]"
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={{
@@ -73,7 +72,7 @@ export function EndingScene({
             {[
               "AIと生きる時代に、",
               "私はコードを書く人から、",
-              "問いを立て、価値をつくる人へ変わっていた。",
+              "人に共感し、問いを立て、価値をつくる人へ変わっていた。",
             ].map((line) => (
               <motion.p
                 key={line}
@@ -91,27 +90,9 @@ export function EndingScene({
               </motion.p>
             ))}
           </motion.div>
-          <div className="relative mx-auto mt-12 h-16 w-full sm:h-20">
-            <AnimatePresence mode="wait">
-              {showQuestion ? (
-                <motion.h2
-                  key="ending-question"
-                  className="font-story-serif absolute inset-x-0 top-0 flex justify-center whitespace-nowrap text-center text-2xl font-light leading-[1.45] text-black sm:text-5xl"
-                  initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: 18, filter: "blur(10px)" }}
-                  transition={{ duration: 1.15, ease: "easeOut" }}
-                >
-                  あなたは、AIとどのように生きていきますか？
-                </motion.h2>
-              ) : null}
-            </AnimatePresence>
-          </div>
         </div>
       </div>
-      <footer className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 text-xs font-light tracking-[0.18em] text-black/45">
-        © 2026 Yong Liang
-      </footer>
+      <ScrollCue show={showScrollCue} delay={0} onClick={onAdvance} />
     </StorySection>
   );
 }

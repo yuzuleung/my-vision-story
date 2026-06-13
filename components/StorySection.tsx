@@ -107,6 +107,8 @@ type TextBlockProps = {
   typewriter?: boolean;
   typewriterDelay?: number;
   bodyNoWrap?: boolean;
+  bodyLarge?: boolean;
+  titleSize?: "default" | "small";
   onTypewriterComplete?: () => void;
 };
 
@@ -131,6 +133,8 @@ export function TextBlock({
   typewriter = false,
   typewriterDelay,
   bodyNoWrap = false,
+  bodyLarge = false,
+  titleSize = "default",
   onTypewriterComplete,
 }: TextBlockProps) {
   const alignment = {
@@ -165,7 +169,13 @@ export function TextBlock({
         </p>
       ) : null}
       {title ? (
-        <h2 className="text-balance text-4xl font-light leading-[1.22] tracking-normal sm:text-5xl lg:text-6xl">
+        <h2
+          className={`text-balance font-light leading-[1.28] tracking-normal ${
+            titleSize === "small"
+              ? "text-3xl sm:text-4xl lg:text-5xl"
+              : "text-4xl sm:text-5xl lg:text-6xl"
+          }`}
+        >
           {title.split("\n").map((line, index) => (
             <motion.span
               key={`${line}-${index}`}
@@ -189,7 +199,13 @@ export function TextBlock({
           />
         ) : (
           <p
-            className={`${bodyNoWrap ? "whitespace-nowrap text-[0.95rem] sm:text-xl" : "text-pretty text-[1.08rem] sm:text-xl"} font-light leading-[2.05] tracking-normal ${
+            className={`${
+              bodyLarge
+                ? "text-2xl leading-[1.75] sm:text-3xl"
+                : bodyNoWrap
+                  ? "whitespace-nowrap text-[0.95rem] leading-[2.05] sm:text-xl"
+                  : "text-pretty text-[1.08rem] leading-[2.05] sm:text-xl"
+            } font-light tracking-normal ${
               muted ? "text-white/58" : "text-white/82"
             }`}
           >
@@ -216,7 +232,7 @@ export function TextBlock({
 type ImageBackdropProps = {
   src: string;
   alt: string;
-  brightness?: "dark" | "balanced" | "bright";
+  brightness?: "dark" | "balanced" | "soft" | "bright";
   focus?: string;
   glow?: boolean;
 };
@@ -233,8 +249,10 @@ export function ImageBackdrop({
       "bg-[radial-gradient(circle_at_55%_45%,rgba(0,0,0,0.18),rgba(0,0,0,0.48)_45%,rgba(0,0,0,0.88)_100%)]",
     balanced:
       "bg-[linear-gradient(90deg,rgba(0,0,0,0.72),rgba(0,0,0,0.18)_48%,rgba(0,0,0,0.52)),radial-gradient(circle_at_center,transparent,rgba(0,0,0,0.58))]",
+    soft:
+      "bg-[linear-gradient(0deg,rgba(255,255,255,0.16),rgba(255,255,255,0.16)),radial-gradient(circle_at_center,rgba(255,255,255,0.08),rgba(255,255,255,0.28)_100%)]",
     bright:
-      "bg-[linear-gradient(90deg,rgba(245,245,238,0.86),rgba(245,245,238,0.22)_44%,rgba(245,245,238,0.42)),linear-gradient(0deg,rgba(255,255,255,0.2),rgba(255,255,255,0.2))]",
+      "bg-[linear-gradient(90deg,rgba(245,245,238,0.58),rgba(245,245,238,0.12)_44%,rgba(245,245,238,0.24)),linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.1))]",
   }[brightness];
 
   return (
