@@ -3,6 +3,7 @@
 import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { TypewriterText } from "./TypewriterText";
 
 type StorySectionProps = {
   id: string;
@@ -39,10 +40,19 @@ export function StorySection({
 
 type ScrollCueProps = {
   dark?: boolean;
+  show?: boolean;
+  delay?: number;
+  positionClass?: string;
   onClick?: () => void;
 };
 
-export function ScrollCue({ dark = false, onClick }: ScrollCueProps) {
+export function ScrollCue({
+  dark = false,
+  show = true,
+  delay = 1.8,
+  positionClass = "bottom-8",
+  onClick,
+}: ScrollCueProps) {
   return (
     <motion.button
       type="button"
@@ -51,12 +61,14 @@ export function ScrollCue({ dark = false, onClick }: ScrollCueProps) {
         event.stopPropagation();
         onClick?.();
       }}
-      className={`absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.28em] ${
+      className={`absolute ${positionClass} left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.28em] ${
+        show ? "pointer-events-auto" : "pointer-events-none"
+      } ${
         dark ? "text-black/45" : "text-white/45"
       }`}
       initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 1.8, duration: 0.9 }}
+      animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+      transition={{ delay: show ? delay : 0, duration: 0.9 }}
     >
       <span>scroll</span>
       <span
@@ -74,6 +86,16 @@ export function ScrollCue({ dark = false, onClick }: ScrollCueProps) {
   );
 }
 
+export function ChapterLabel({
+  label: _label,
+  dark: _dark = false,
+}: {
+  label: string;
+  dark?: boolean;
+}) {
+  return null;
+}
+
 type TextBlockProps = {
   eyebrow?: string;
   title?: string;
@@ -82,15 +104,19 @@ type TextBlockProps = {
   muted?: boolean;
   delay?: number;
   className?: string;
+  typewriter?: boolean;
+  typewriterDelay?: number;
+  bodyNoWrap?: boolean;
+  onTypewriterComplete?: () => void;
 };
 
-const textVariants: Variants = {
-  hidden: { opacity: 0, y: 22, filter: "blur(8px)" },
+const lineVariants: Variants = {
+  hidden: { opacity: 0, y: 18, filter: "blur(8px)" },
   visible: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 1.05, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.95, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -102,6 +128,10 @@ export function TextBlock({
   muted = false,
   delay = 0,
   className = "",
+  typewriter = false,
+  typewriterDelay,
+  bodyNoWrap = false,
+  onTypewriterComplete,
 }: TextBlockProps) {
   const alignment = {
     left: "text-left items-start",
@@ -112,11 +142,18 @@ export function TextBlock({
   return (
     <motion.div
       className={`relative z-10 flex max-w-2xl flex-col gap-5 whitespace-pre-line ${alignment} ${className}`}
-      variants={textVariants}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            delayChildren: delay || 0.5,
+            staggerChildren: 0.32,
+          },
+        },
+      }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: false, amount: 0.55 }}
-      transition={{ delay }}
     >
       {eyebrow ? (
         <p
@@ -129,17 +166,48 @@ export function TextBlock({
       ) : null}
       {title ? (
         <h2 className="text-balance text-4xl font-light leading-[1.22] tracking-normal sm:text-5xl lg:text-6xl">
-          {title}
+          {title.split("\n").map((line, index) => (
+            <motion.span
+              key={`${line}-${index}`}
+              className={`block ${line.length <= 20 ? "whitespace-nowrap" : ""}`}
+              variants={lineVariants}
+            >
+              {line}
+            </motion.span>
+          ))}
         </h2>
       ) : null}
       {body ? (
-        <p
-          className={`text-pretty text-[1.08rem] font-light leading-[2.05] tracking-normal sm:text-xl ${
-            muted ? "text-white/58" : "text-white/82"
-          }`}
-        >
-          {body}
-        </p>
+        typewriter ? (
+          <TypewriterText
+            text={body}
+            delay={typewriterDelay}
+            className={`text-pretty text-[1.08rem] font-light leading-[2.05] tracking-normal sm:text-xl ${
+              muted ? "text-white/58" : "text-white/82"
+            }`}
+            onComplete={onTypewriterComplete}
+          />
+        ) : (
+          <p
+            className={`${bodyNoWrap ? "whitespace-nowrap text-[0.95rem] sm:text-xl" : "text-pretty text-[1.08rem] sm:text-xl"} font-light leading-[2.05] tracking-normal ${
+              muted ? "text-white/58" : "text-white/82"
+            }`}
+          >
+            {body.split("\n").map((line, index) =>
+              line ? (
+                <motion.span
+                  key={`${line}-${index}`}
+                  className="block"
+                  variants={lineVariants}
+                >
+                  {line}
+                </motion.span>
+              ) : (
+                <span key={`space-${index}`} className="block h-5" />
+              ),
+            )}
+          </p>
+        )
       ) : null}
     </motion.div>
   );
@@ -190,21 +258,21 @@ export function ImageBackdrop({
 export function OpeningScene({ onAdvance }: { onAdvance: () => void }) {
   return (
     <StorySection id="opening" className="quiet-grain" onAdvance={onAdvance}>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(255,255,255,0.08),transparent_32%),#030303]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(237,234,227,0.08),transparent_33%),#080808]" />
       <main className="relative z-10 flex min-h-screen min-h-svh flex-col items-center justify-center px-6 text-center">
         <motion.h1
-          className="text-5xl font-extralight tracking-normal sm:text-7xl lg:text-8xl"
-          initial={{ opacity: 0, y: 16, filter: "blur(12px)" }}
+          className="font-story-serif text-5xl font-light tracking-normal text-[#EDEAE3] sm:text-7xl lg:text-8xl"
+          initial={{ opacity: 0, y: 18, filter: "blur(14px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1.35, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1.9, ease: [0.22, 1, 0.36, 1] }}
         >
           AIと生きる私
         </motion.h1>
         <motion.p
-          className="mt-10 max-w-xl whitespace-pre-line text-base font-light leading-9 text-white/68 sm:text-xl sm:leading-10"
-          initial={{ opacity: 0, y: 18 }}
+          className="mt-10 max-w-xl whitespace-pre-line text-sm font-light leading-8 text-[#EDEAE3]/58 sm:text-lg sm:leading-9"
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.95, duration: 1.1, ease: "easeOut" }}
+          transition={{ delay: 1.25, duration: 1.35, ease: "easeOut" }}
         >
           {"私はエンジニアです。\n最近、自分の価値について考えるようになりました。"}
         </motion.p>

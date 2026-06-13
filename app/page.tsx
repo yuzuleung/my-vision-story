@@ -3,6 +3,7 @@
 import { ChatScene } from "@/components/ChatScene";
 import { EndingScene } from "@/components/EndingScene";
 import { ImageScene } from "@/components/ImageScene";
+// import { RealizationScene } from "@/components/RealizationScene";
 import { OpeningScene } from "@/components/StorySection";
 import { useRef } from "react";
 
@@ -12,6 +13,7 @@ const sections = [
   "with-ai",
   "lost",
   "dialogue",
+  // "realization",
   "future-work",
   "future-life",
   "ending",
@@ -43,11 +45,14 @@ export default function Home() {
         id="before-ai"
         image={imageSrc("/images/01-before-ai.png")}
         alt="AI以前、自分の手でコードと向き合う私"
-        body={"以前の私は、\n自分の手でコードを書き、\nエラーを読み、\n原因を探し、\n一つずつ問題を解決していた。"}
+        chapter="01 Before"
+        body={"以前の私は、\nコードを書くことが最高だと思っていた。\n\n自分の手できれいなコードを書き、\nエラーを読み、\n原因を探し、\n一つずつ問題を解決していた。"}
         brightness="balanced"
         focus="center"
         placement="left"
         glow
+        typewriter
+        typewriterDelay={1000}
         onAdvance={() => advanceTo(1)}
       />
 
@@ -55,12 +60,14 @@ export default function Home() {
         id="with-ai"
         image={imageSrc("/images/02-with-ai.png")}
         alt="AIと共にコードを見る私"
-        body={"今は、AIが数分でコードを書く。\n私はそれを見て、確認し、判断する。"}
-        body2={"便利になった。\nでも、少し怖かった。"}
+        chapter="02 Now"
+        body={"今は、AIが数分でコードを書く。\n\n私はそれを見て、\n確認し、判断する。"}
+        body2={"便利になった。\nでも、少し不安だった。"}
         brightness="balanced"
         focus="center"
-        placement="right"
-        dimOnSecond
+        placement="left"
+        typewriter
+        typewriterDelay={1000}
         onAdvance={() => advanceTo(2)}
       />
 
@@ -68,28 +75,34 @@ export default function Home() {
         id="lost"
         image={imageSrc("/images/03-lost.png")}
         alt="迷いの中で自分の価値を考える私"
-        body={"AIの方が速く、正確に作れるなら、\n私は何をする人になるのだろう。"}
-        body2={"エンジニアとしての価値とは何だろう。"}
+        chapter="03 Lost"
+        body={"AIの方が速く、正確に作れるなら、私はどんな価値を持つ人になるのだろう。"}
+        body2={"エンジニアとしての私の価値は何だろう。"}
         tone="mist"
         brightness="dark"
         focus="center"
         placement="center"
+        bodyNoWrap
+        delay={1}
         onAdvance={() => advanceTo(3)}
       />
 
       <ChatScene onAdvance={() => advanceTo(4)} />
 
+      {/* <RealizationScene onAdvance={() => advanceTo(5)} /> */}
+
       <ImageScene
         id="future-work"
         image={imageSrc("/images/04-future-work.png")}
         alt="AIと協働しながら未来の仕事へ向かう私"
+        chapter="06 Future Work"
         title={"私は実行者から、\n創造者・指揮者・評価者へ。"}
-        note={"AIは作業を助ける。\n私は問いを立て、価値を決め、方向を示す。"}
+        note={"AIは作業を助ける。\n私は課題を見つけ、価値を決め、方向を示す。"}
         tone="hope"
         brightness="bright"
         focus="center"
         placement="left"
-        roles
+        delay={1.0}
         onAdvance={() => advanceTo(5)}
       />
 
@@ -97,7 +110,8 @@ export default function Home() {
         id="future-life"
         image={imageSrc("/images/05-future-life.png")}
         alt="生活の中に自然に入り込むAI"
-        title={"AIは仕事だけでなく、\n生活の中にも自然に入り込んでいく。"}
+        chapter="07 Future Life"
+        title={"生活の中にも自然に入り込んでいく。"}
         note={"予約、買い物、移動、相談。\nAIは日常の小さな選択にも寄り添う存在になる。"}
         tone="hope"
         brightness="bright"

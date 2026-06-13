@@ -3,7 +3,13 @@
 :root {
   color-scheme: light dark;
   --foreground: #f7f7f4;
-  --background: #050505;
+  --background: #080808;
+  --font-serif-jp: "Noto Serif JP", "Shippori Mincho", "Yu Mincho",
+    "Hiragino Mincho ProN", serif;
+  --font-sans-jp: "Noto Sans JP", "Zen Kaku Gothic New", system-ui,
+    -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "Segoe UI",
+    sans-serif;
 }
 
 * {
@@ -17,9 +23,7 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
-    "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "Noto Sans JP",
-    "Segoe UI", sans-serif;
+  font-family: var(--font-sans-jp);
 }
 
 body {
@@ -83,6 +87,14 @@ select {
 
 .image-glow {
   box-shadow: 0 0 90px rgba(160, 205, 255, 0.1);
+}
+
+.font-story-serif {
+  font-family: var(--font-serif-jp);
+}
+
+.font-story-sans {
+  font-family: var(--font-sans-jp);
 }
 
 .message-caret::after {
