@@ -171,13 +171,7 @@ export function ImageBackdrop({
 
   return (
     <div className={`absolute inset-0 ${glow ? "image-glow" : ""}`}>
-      <motion.div
-        className="absolute inset-0"
-        initial={{ scale: 1, opacity: 0.78 }}
-        whileInView={{ scale: 1.055, opacity: 1 }}
-        viewport={{ once: false, amount: 0.45 }}
-        transition={{ duration: 7, ease: "easeOut" }}
-      >
+      <div className="absolute inset-0">
         <Image
           src={src}
           alt={alt}
@@ -187,7 +181,7 @@ export function ImageBackdrop({
           className="object-cover"
           style={{ objectPosition: focus }}
         />
-      </motion.div>
+      </div>
       <div className={`absolute inset-0 z-[1] ${overlay}`} />
     </div>
   );
