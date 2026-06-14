@@ -28,6 +28,7 @@ type ImageSceneProps = {
   chapter?: string;
   textPanel?: boolean;
   textClassName?: string;
+  bodyTextClassName?: string;
   onAdvance: () => void;
   typewriter?: boolean;
   typewriterDelay?: number;
@@ -75,6 +76,7 @@ export function ImageScene({
   chapter,
   textPanel = false,
   textClassName,
+  bodyTextClassName,
   onAdvance,
   typewriter = false,
   typewriterDelay,
@@ -168,6 +170,7 @@ export function ImageScene({
             align={align}
             muted={!isLight}
             className={textClassName ?? (isLight ? "text-[#111]" : "")}
+            bodyTextClassName={bodyTextClassName}
             delay={delay}
             typewriter={typewriter}
             typewriterDelay={typewriterDelay}

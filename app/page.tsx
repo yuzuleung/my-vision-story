@@ -138,14 +138,15 @@ export default function Home() {
         image={imageSrc("/images/04-future-work.png")}
         alt="AIと協働しながら未来の仕事へ向かう私"
         chapter="06 Future Work"
-        title={"私は課題を見つけ、価値を決め、方向を示す。\nAIは作業を助ける。"}
-        note={"私は実行者から、創造者・指揮者・評価者へ。"}
+        body={"私は課題を見つけ、価値を決め、方向を示す。\nAIは作業を助ける。"}
+        body2={"私は実行者から、創造者へ。"}
         tone="hope"
         brightness="bright"
         focus="center"
         placement="left"
-        titleSize="small"
-        delay={1.0}
+        typewriter
+        typewriterDelay={1000}
+        bodyTextClassName="text-[#111]/62"
         onAdvance={() => advanceTo(8)}
       />
 

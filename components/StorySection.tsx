@@ -104,6 +104,7 @@ type TextBlockProps = {
   muted?: boolean;
   delay?: number;
   className?: string;
+  bodyTextClassName?: string;
   typewriter?: boolean;
   typewriterDelay?: number;
   bodyNoWrap?: boolean;
@@ -130,6 +131,7 @@ export function TextBlock({
   muted = false,
   delay = 0,
   className = "",
+  bodyTextClassName,
   typewriter = false,
   typewriterDelay,
   bodyNoWrap = false,
@@ -193,7 +195,7 @@ export function TextBlock({
             text={body}
             delay={typewriterDelay}
             className={`text-pretty text-[1.08rem] font-light leading-[2.05] tracking-normal sm:text-xl ${
-              muted ? "text-white/58" : "text-white/82"
+              bodyTextClassName ?? (muted ? "text-white/58" : "text-white/82")
             }`}
             onComplete={onTypewriterComplete}
           />
@@ -206,7 +208,7 @@ export function TextBlock({
                   ? "whitespace-nowrap text-[0.95rem] leading-[2.05] sm:text-xl"
                   : "text-pretty text-[1.08rem] leading-[2.05] sm:text-xl"
             } font-light tracking-normal ${
-              muted ? "text-white/58" : "text-white/82"
+              bodyTextClassName ?? (muted ? "text-white/58" : "text-white/82")
             }`}
           >
             {body.split("\n").map((line, index) =>
